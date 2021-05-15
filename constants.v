@@ -1,0 +1,45 @@
+`define WORD 32
+`define BYTE 8 
+`define FACTOR 4
+`define INS_SIZE 512 
+`define REG_NUM 32;
+
+`define ADD 4'd1
+`define ADDU 4'd2
+`define AND 4'd3
+`define OR 4'd4
+`define XOR 4'd5
+`define NO_OP 4'd6
+`define SUB 4'd7
+`define SUBU 4'd8
+`define NOR 4'd9
+`define SHL 4'd10
+`define SHR 4'd11
+`define SHRA 4'd12
+
+`define SW_OPCODE 6'h26
+`define LW_OPCODE 6'h23
+`define ADDI_OPCODE 6'h8
+`define ADDIU_OPCODE 6'h9
+`define ANDI_OPCODE 6'hc
+`define ORI_OPCODE 6'hd
+`define XORI_OPCODE 6'he
+`define BEQ_OPCODE 6'h4
+`define BNE_OPCODE 6'h5
+`define J_OPCODE 6'h2
+
+`define ADD_FUN 6'h20
+`define ADDU_FUN 6'h21
+`define SUB_FUN 6'h22
+`define SUBU_FUN 6'h23
+`define AND_FUN 6'h24
+`define NOR_FUN 6'h27
+`define OR_FUN 6'h25
+`define XOR_FUN 6'h26
+`define SLL_FUN 6'h0
+`define SLLV_FUN 6'h4
+`define SRL_FUN 6'h2
+`define SRLV_FUN 6'h6
+`define SRA_FUN 6'h3
+`define SRAV_FUN 6'h7
+`define JAL_FUN 6'hf
