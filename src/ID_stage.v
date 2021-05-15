@@ -64,7 +64,7 @@ module ID_stage (
     );
 
     assign jump_address = instruction[25:0];
-    assign branch_offset = instruction[15:0];
+    assign branch_offset = signed_immd;
 
     // mux for selecting dest reg for wb operation
     // and forwarding.

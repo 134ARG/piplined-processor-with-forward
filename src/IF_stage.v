@@ -43,13 +43,13 @@ module IF_stage (
 
     assign offset_times_4 = branch_offset << 2;
 
-    // always @(jump_taken) begin
-    //     if (jump_taken == 1) add_result <= new_addr;
-    // end
-
     initial begin
         $display("init if");
-        // $monitor("ins!:%b", instruction);
+    end
+
+    always @(branch_taken) begin
+        if (branch_taken)
+            $display("---branch: offset:%h", branch_offset);
     end
 
     data_mux is_branch (
