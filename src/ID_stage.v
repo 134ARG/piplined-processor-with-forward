@@ -46,7 +46,7 @@ module ID_stage (
     output [4:0] reg_rs, reg_rt, reg_dest;
     output [`WORD-1:0] alu_1_data, alu_2_data, st_data, branch_offset, jump_address;
 
-    wire is_immd, branch_taken;
+    wire is_immd, is_jal, is_jr;
     wire [`WORD-1:0] regd1, regd2, signed_immd, unsigned_immd, branch_a1, branch_a2;
 
     initial begin
@@ -54,7 +54,7 @@ module ID_stage (
     end
 
     always @(instruction) begin
-        $display("instruction op:%b, branch:%b", instruction[31:26], branch_taken);
+        $display("instruction op:%b, funct:%b, branch:%b", instruction[31:26], instruction[5:0], branch_taken);
     end
 
     data_mux_4 branch_a1_cond (
@@ -102,16 +102,19 @@ module ID_stage (
         .branch_taken(branch_taken),
         .jump_taken(jump_taken),
         .terminate(terminate),
-        .is_branch(is_branch)
+        .is_branch(is_branch),
+        .is_jal(is_jal),u898
+        .is_jr(is_jr)
     );
 
-    assign jump_address = instruction[25:0];
+    assign jump_address = (is_jr) ? branch_a1 >> 2 : instruction[25:0];
     assign branch_offset = signed_immd;
 
     // mux for selecting dest reg for wb operation
     // and forwarding.
     reg_mux dest_sel (
         .sel(is_immd),
+        .ra(is_jal),
         .in1(instruction[15:11]),   // rd
         .in2(instruction[20:16]),   // rt
         .out(reg_dest)
