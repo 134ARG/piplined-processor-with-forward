@@ -8,7 +8,7 @@ module sign_extend (
     input [15:0] immd;
     output [`WORD-1:0] signed_immd;
 
-    assign signed_immd = (immd[15] == 1) ? (32'h0 | immd) : (32'hf & immd);
+    assign signed_immd = (immd[15] == 0) ? (32'h0 | immd) : (32'hffff0000 | immd);
 
 endmodule //ID_stage
 
@@ -41,6 +41,10 @@ module ID_stage (
 
     wire is_immd, branch_taken;
     wire [`WORD-1:0] regd1, regd2, signed_immd, unsigned_immd;
+
+    initial begin
+        $display("init ID");
+    end
 
     control ctl (
         .op(instruction[31:26]),

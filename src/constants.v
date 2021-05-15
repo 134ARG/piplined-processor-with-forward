@@ -1,8 +1,9 @@
 `define WORD 32
 `define BYTE 8 
 `define FACTOR 4
-`define INS_SIZE 512 
-`define REG_NUM 32;
+`define INS_SIZE 512
+`define MEM_SIZE 512
+`define REG_NUM 32
 
 `define ADD 4'd1
 `define ADDU 4'd2
@@ -16,8 +17,9 @@
 `define SHL 4'd10
 `define SHR 4'd11
 `define SHRA 4'd12
+`define LE 4'd13
 
-`define SW_OPCODE 6'h26
+`define SW_OPCODE 6'h2b
 `define LW_OPCODE 6'h23
 `define ADDI_OPCODE 6'h8
 `define ADDIU_OPCODE 6'h9
@@ -43,3 +45,4 @@
 `define SRA_FUN 6'h3
 `define SRAV_FUN 6'h7
 `define JAL_FUN 6'hf
+`define SLT_FUN 6'h2a

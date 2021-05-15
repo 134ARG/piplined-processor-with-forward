@@ -3,6 +3,10 @@
 module load_stall (
     mem_r_EX, reg_dest_EX, reg_rt_ID, reg_rs_ID, stall
 );
+
+    initial begin
+        $display("init loadstall");
+    end
     input mem_r_EX;
     input [4:0] reg_dest_EX, reg_rt_ID, reg_rs_ID;
     output stall;

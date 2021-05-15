@@ -26,7 +26,7 @@ module data_mux_3 (
     sel, in1, in2, in3, out
 );
     input [1:0]sel;
-    input [`WORD-1:0] in1, in2;
+    input [`WORD-1:0] in1, in2, in3;
     output [`WORD-1:0] out;
 
     assign out = (sel == 2'd0) ? in1 : 

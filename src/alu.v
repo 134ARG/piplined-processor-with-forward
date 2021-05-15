@@ -18,10 +18,12 @@ module alu (
         `NO_OP: begin result <= 0; end
         `SUB: begin result <= data1 - data2; end
         `SUBU: begin result <= data1 - data2; end
-        `NOR: begin result <= !(data1 | data2); end
+        `NOR: begin result <= 32'hffffffff ^ (data1 | data2); end
         `SHL: begin result <= data2 << data1; end
         `SHR: begin result <= data2 >> data1; end
-        `SHRA: begin result <= data2 >> data1; end
+        `SHRA: begin 
+            result <= data2[31] ? (data2 >> data1) | (32'hffffffff << (32-data1)) : data2 >> data1; end
+        `LE: begin result <= data1 < data2; end
         default : begin result <= 0; end
         endcase
     end

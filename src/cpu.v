@@ -1,6 +1,7 @@
 `include "constants.v"
 
 module cpu(clk);
+    input clk;
     wire rst = 0;
     wire branch_taken, jump_taken, stall;
     wire [`WORD-1:0] jump_target, branch_offset;
@@ -35,6 +36,9 @@ module cpu(clk);
 
     wire [`WORD-1:0] wb_data;
 
+    // initial begin
+    //     $monitor("%b", stall);
+    // end
     IF_stage if_stage (
         .clk(clk),
         .rst(rst),
@@ -45,16 +49,16 @@ module cpu(clk);
         .new_addr(jump_target),
         // outputs
         .PC(),
-        .instruction(insturction)
+        .instruction(instruction)
     );
 
     IF_to_ID IFID (
         .clk(clk),
         .rst(rst),
-        .flush(branch_taken),
+        .flush(branch_taken | jump_taken),
         .freeze(stall),
         .PC_in(),
-        .insturction_in(insturction),
+        .instruction_in(instruction),
         // outputs
         .PC_out(),
         .instruction_out(instruction_out)
@@ -141,7 +145,7 @@ module cpu(clk);
         .alu_2_sel(alu_2_sel),
 
         .st_data(st_data_EX),
-        .st_data_MEM(st_MEM),
+        .st_data_MEM(alu_MEM),
         .st_data_WB(wb_data),
         .st_data_sel(st_data_sel),
 
@@ -190,6 +194,7 @@ module cpu(clk);
         .clk(clk),
         .rst(rst),
         .mem_w(mem_w_MEM),
+        .terminate(tem_MEM),
         .alu_result(alu_MEM),
         .st_data(st_MEM),
         // outputs
