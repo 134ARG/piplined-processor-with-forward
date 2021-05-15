@@ -20,11 +20,8 @@ module InstructionRAM (
     integer i;
 
     initial begin
-        $readmemb("machine_code6.txt", RAM);
+        $readmemb("instructions.bin", RAM);
         // $monitor("ins_load:%b, %b", RAM[0], RAM[1]);
-    end
-    always @(address) begin
-        $display("address:PC:%b", address);
     end
     always @(rst) begin
         if (rst) begin

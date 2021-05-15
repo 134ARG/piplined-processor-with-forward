@@ -6,7 +6,7 @@ module cpu(clk);
     wire branch_taken, jump_taken, stall, is_branch;
     wire [`WORD-1:0] jump_target, branch_offset;
 
-    wire [`WORD-1:0] PC, instruction;
+    wire [`WORD-1:0] PC, instruction, PC_to_ID;
 
     wire [`WORD-1:0] instruction_out;
 
@@ -48,7 +48,7 @@ module cpu(clk);
         .stall(stall),
         .new_addr(jump_target),
         // outputs
-        .PC(),
+        .PC(PC),
         .instruction(instruction)
     );
 
@@ -57,10 +57,10 @@ module cpu(clk);
         .rst(rst),
         .flush(branch_taken | jump_taken),
         .freeze(stall),
-        .PC_in(),
+        .PC_in(PC),
         .instruction_in(instruction),
         // outputs
-        .PC_out(),
+        .PC_out(PC_to_ID),
         .instruction_out(instruction_out)
     );
 
@@ -85,6 +85,7 @@ module cpu(clk);
         .rst(rst),
         .instruction(instruction_out),
         .stall(stall),
+        .PC(PC_to_ID),
 
         .wb_dest(reg_dest_WB),
         .wb_en(wb_en_WB),

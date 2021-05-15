@@ -1,0 +1,2 @@
+cpu : 
+	iverilog alu.v constants.v control.v cpu.v dataMEM.v EX_stage.v EX_to_MEM.v forward.v ID_stage.v ID_to_EX.v IF_stage.v IF_to_ID.v InstructionRAM.v load_stall.v main.v mux.v MEM_stage.v register_file.v MEM_to_WB.v WB_stage.v -o cpu.out

@@ -48,11 +48,6 @@ module IF_stage (
         $display("init if");
     end
 
-    always @(branch_taken) begin
-        if (branch_taken)
-            $display("---branch: offset:%h", branch_offset);
-    end
-
     data_mux is_branch (
         .sel(branch_taken),
         .in1(32'd4),

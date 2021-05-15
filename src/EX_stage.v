@@ -21,18 +21,6 @@ module EX_stage (
 
     wire [31:0] alu_1, alu_2;
 
-    initial begin
-        $display("init EX");
-    end
-
-
-
-    // always @(st_data_sel) begin
-    //     if (st_data_sel == 2'd0) $display("3; forward: default.");
-    //     else if (st_data_sel == 2'd1) $display("3; forward: MEM: %b", st_data_MEM);
-    //     else $display("3; forward: WB: %b", st_data_WB);
-    // end
-
     data_mux_3 alu_1_src (
         .sel(alu_1_sel),
         .in1(alu_1_data),
