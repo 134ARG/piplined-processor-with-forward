@@ -22,7 +22,7 @@ module unsign_extend (
 endmodule
 
 module ID_stage (
-    clk, rst, instruction, stall,
+    clk, rst, instruction, PC, stall,
     wb_dest, wb_en, wb_data,
     branch_a1_sel, branch_a2_sel,
     branch_a1_EX, branch_a1_MEM, branch_a2_EX, branch_a2_MEM,
@@ -36,7 +36,7 @@ module ID_stage (
 );
     input clk, rst, stall, wb_en;
     input [4:0] wb_dest;
-    input [`WORD-1:0] instruction, wb_data;
+    input [`WORD-1:0] instruction, wb_data, PC;
 
     input [1:0] branch_a1_sel, branch_a2_sel;
     input [`WORD-1:0] branch_a1_EX, branch_a1_MEM, branch_a1_WB, branch_a2_EX, branch_a2_MEM, branch_a2_WB;
@@ -47,15 +47,7 @@ module ID_stage (
     output [`WORD-1:0] alu_1_data, alu_2_data, st_data, branch_offset, jump_address;
 
     wire is_immd, is_jal, is_jr;
-    wire [`WORD-1:0] regd1, regd2, signed_immd, unsigned_immd, branch_a1, branch_a2;
-
-    initial begin
-        $display("init ID");
-    end
-
-    always @(instruction) begin
-        $display("instruction op:%b, funct:%b, branch:%b", instruction[31:26], instruction[5:0], branch_taken);
-    end
+    wire [`WORD-1:0] regd1, regd2, signed_immd, unsigned_immd, branch_a1, branch_a2, tmp;
 
     data_mux_4 branch_a1_cond (
         .sel(branch_a1_sel),
@@ -75,24 +67,13 @@ module ID_stage (
         .out(branch_a2)
     );
 
-    always @(branch_a1_sel) begin
-        if (branch_a1_sel == 2'd0) $display("1: forward: default.");
-        else if (branch_a1_sel == 2'd1) $display("1; forward: EX: %b", branch_a1_EX);
-        else $display("1; forward: MEM: %b", branch_a1_MEM);
-    end
-
-    always @(branch_a2_sel) begin
-        if (branch_a2_sel == 2'd0) $display("2; forward: default.");
-        else if (branch_a2_sel == 2'd1) $display("2; forward: MEM: %b", branch_a2_EX);
-        else $display("2; forward: WB: %b", branch_a2_MEM);
-    end
-
     control ctl (
         .op(instruction[31:26]),
         .funct(instruction[5:0]),
         .harzard(stall),
         .reg_rs_d(branch_a1),
         .reg_rt_d(branch_a2),
+        // outputs
         .is_immd(is_immd),
         .only_shamt(only_shamt),
         .mem_w(mem_w),
@@ -161,6 +142,13 @@ module ID_stage (
         .sel(only_shamt),
         .in1(regd1),
         .in2(unsigned_immd),
+        .out(tmp)
+    );
+
+    data_mux alu1_select_for_jal (
+        .sel(is_jal),
+        .in1(tmp),
+        .in2(PC + 4),
         .out(alu_1_data)
     );
 
