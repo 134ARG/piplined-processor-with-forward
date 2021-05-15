@@ -1,13 +1,13 @@
 `include "constants.v"
 
 module reg_mux (
-    sel, in1, in2, out
+    sel, ra, in1, in2, out
 );
-    input sel;
+    input sel, ra;
     input [4:0] in1, in2;
     output [4:0] out;
 
-    assign out = (sel == 0) ? in1 : in2;
+    assign out = (ra) ? 5'b11111 : (sel == 0) ? in1 : in2;
 
 endmodule //ID_stage
 

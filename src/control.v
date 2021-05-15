@@ -3,22 +3,22 @@
 module control (
     op, funct, harzard, reg_rs_d, reg_rt_d,
     is_immd, only_shamt, mem_w, mem_r, alu_op,
-    wb_en, branch_taken, jump_taken, terminate, is_branch
+    wb_en, branch_taken, jump_taken, terminate, is_branch, is_jal, is_jr
 );
     input [5:0] op, funct;
     input [`WORD-1:0] reg_rs_d, reg_rt_d;
     input harzard;
-    output reg is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, is_branch;
+    output reg is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, is_branch, is_jal, is_jr;
     output reg [3:0] alu_op;
 
     initial begin
         $display("init control");
         // $monitor("tem:%b", terminate);
-        {is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, alu_op, is_branch} <= 0;
+        {is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, alu_op, is_branch, is_jal, is_jr} <= 0;
     end
     always @(*) begin
         if (harzard == 0) begin
-            {is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, alu_op, is_branch} <= 0;
+            {is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, alu_op, is_branch, is_jal, is_jr} <= 0;
             if (op == 6'b111111 && funct == 6'b111111) terminate <= 1;
             else terminate <= 0;
             case(op)
@@ -40,7 +40,7 @@ module control (
                 is_branch <= 1;
             end
             `J_OPCODE: begin alu_op <= `NO_OP; jump_taken <= 1; end
-            `JAL_OPCODE: begin alu_op <= `NO_OP; jump_taken <= 1; end
+            `JAL_OPCODE: begin alu_op <= `ADD; jump_taken <= 1; is_jal <= 1; wb_en <= 1; end
             0: begin
                 case(funct)
                 `ADD_FUN: begin alu_op <= `ADD; wb_en <= 1; end
@@ -59,7 +59,7 @@ module control (
                 `SRAV_FUN: begin alu_op <= `SHRA; wb_en <= 1; end
                 `JAL_FUN: begin alu_op <= `NO_OP; jump_taken <= 1; end
                 `SLT_FUN: begin alu_op <= `LE; wb_en <= 1; end
-                `JR_FUN: begin alu_op <= `NO_OP; jump_taken <= 1; end
+                `JR_FUN: begin alu_op <= `NO_OP; jump_taken <= 1; is_jr <= 1; end
                 default: {is_immd, mem_w, mem_r, wb_en, branch_taken, only_shamt, jump_taken, terminate, alu_op} <= 0;
                 endcase
             end

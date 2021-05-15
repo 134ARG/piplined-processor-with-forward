@@ -103,7 +103,7 @@ module ID_stage (
         .jump_taken(jump_taken),
         .terminate(terminate),
         .is_branch(is_branch),
-        .is_jal(is_jal),u898
+        .is_jal(is_jal),
         .is_jr(is_jr)
     );
 

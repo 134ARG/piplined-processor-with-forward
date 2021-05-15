@@ -39,9 +39,10 @@ module IF_stage (
     output [`WORD-1:0] PC, instruction;
     
 
-    wire [`WORD-1:0] offset_times_4, add_input, add_result;
+    wire [`WORD-1:0] offset_times_4, add_input, add_result, new_addr_times_4;
 
     assign offset_times_4 = branch_offset << 2;
+    assign new_addr_times_4 = new_addr << 2;
 
     initial begin
         $display("init if");
@@ -67,7 +68,7 @@ module IF_stage (
 
     register pc_reg(
         .clk(clk),
-        .in(jump_taken ? new_addr : add_result),
+        .in(jump_taken ? new_addr_times_4 : add_result),
         .rst(rst),
         .en(~stall),
         .out(PC)
