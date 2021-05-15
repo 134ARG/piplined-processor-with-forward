@@ -3,7 +3,7 @@
 module cpu(clk);
     input clk;
     wire rst = 0;
-    wire branch_taken, jump_taken, stall;
+    wire branch_taken, jump_taken, stall, is_branch;
     wire [`WORD-1:0] jump_target, branch_offset;
 
     wire [`WORD-1:0] PC, instruction;
@@ -64,6 +64,22 @@ module cpu(clk);
         .instruction_out(instruction_out)
     );
 
+    wire [1:0] branch_a1_sel, branch_a2_sel;
+    forward2 forward_branch (
+        .wb_en_EX(wb_en_EX),
+        .wb_en_MEM(wb_en_MEM),
+        .wb_en_WB(wb_en_WB),
+        .mem_r_en(mem_r_EX | mem_r_MEM),
+        .reg_rs(reg_rs_ID),
+        .reg_rt(reg_rt_ID),
+        .reg_dest_EX(reg_dest_EX),
+        .reg_dest_MEM(reg_dest_MEM),
+        .reg_dest_WB(reg_dest_WB),
+
+        .alu_1_sel(branch_a1_sel),
+        .alu_2_sel(branch_a2_sel)
+    );
+
     ID_stage id_stage (
         .clk(clk),
         .rst(rst),
@@ -73,6 +89,16 @@ module cpu(clk);
         .wb_dest(reg_dest_WB),
         .wb_en(wb_en_WB),
         .wb_data(wb_data),
+
+        .branch_a1_sel(branch_a1_sel),
+        .branch_a2_sel(branch_a2_sel),
+
+        .branch_a1_EX(alu_out_EX),
+        .branch_a1_MEM(alu_MEM),
+        .branch_a1_WB(wb_data),
+        .branch_a2_EX(alu_out_EX),
+        .branch_a2_MEM(alu_MEM),
+        .branch_a2_WB(wb_data),
         // outputs
         .mem_w(mem_w_ID),
         .mem_r(mem_r_ID),
@@ -88,7 +114,8 @@ module cpu(clk);
         .st_data(st_data_ID),
         .branch_offset(branch_offset),
         .jump_address(jump_target),
-        .terminate(tem_ID)
+        .terminate(tem_ID),
+        .is_branch(is_branch)
     );
 
     ID_to_EX pip_reg2 (
@@ -122,6 +149,8 @@ module cpu(clk);
 
     load_stall h (
         .mem_r_EX(mem_r_EX),
+        .mem_r_MEM(mem_r_MEM),
+        .is_branch(is_branch),
         .reg_dest_EX(reg_dest_EX),
         .reg_rt_ID(reg_rt_ID),
         .reg_rs_ID(reg_rs_ID),

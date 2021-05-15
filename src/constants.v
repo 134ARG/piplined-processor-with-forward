@@ -29,6 +29,7 @@
 `define BEQ_OPCODE 6'h4
 `define BNE_OPCODE 6'h5
 `define J_OPCODE 6'h2
+`define JAL_OPCODE 6'h1
 
 `define ADD_FUN 6'h20
 `define ADDU_FUN 6'h21
@@ -46,3 +47,4 @@
 `define SRAV_FUN 6'h7
 `define JAL_FUN 6'hf
 `define SLT_FUN 6'h2a
+`define JR_FUN 6'h8

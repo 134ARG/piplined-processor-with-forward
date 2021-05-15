@@ -32,3 +32,15 @@ module data_mux_3 (
     assign out = (sel == 2'd0) ? in1 : 
                     (sel == 2'd1) ? in2 : in3;
 endmodule //mux
+
+module data_mux_4 (
+    sel, in1, in2, in3, in4, out
+);
+    input [1:0]sel;
+    input [`WORD-1:0] in1, in2, in3, in4;
+    output [`WORD-1:0] out;
+
+    assign out = (sel == 2'd0) ? in1 : 
+                    (sel == 2'd1) ? in2 : 
+                    (sel == 2'd2) ? in3 : in4;
+endmodule //mux

@@ -20,7 +20,7 @@ module InstructionRAM (
     integer i;
 
     initial begin
-        $readmemb("machine_code5.txt", RAM);
+        $readmemb("machine_code8.txt", RAM);
         // $monitor("ins_load:%b, %b", RAM[0], RAM[1]);
     end
     always @(address) begin

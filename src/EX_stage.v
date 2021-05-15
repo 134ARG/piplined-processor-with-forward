@@ -25,23 +25,13 @@ module EX_stage (
         $display("init EX");
     end
 
-    always @(alu_1_sel) begin
-        if (alu_1_sel == 2'd0) $display("1: forward: default.");
-        else if (alu_1_sel == 2'd1) $display("1; forward: MEM: %b", alu_1_MEM);
-        else $display("1; forward: WB: %b", alu_1_WB);
-    end
 
-    always @(alu_2_sel) begin
-        if (alu_2_sel == 2'd0) $display("2; forward: default.");
-        else if (alu_2_sel == 2'd1) $display("2; forward: MEM: %b", alu_2_MEM);
-        else $display("2; forward: WB: %b", alu_2_WB);
-    end
 
-    always @(st_data_sel) begin
-        if (st_data_sel == 2'd0) $display("3; forward: default.");
-        else if (st_data_sel == 2'd1) $display("3; forward: MEM: %b", st_data_MEM);
-        else $display("3; forward: WB: %b", st_data_WB);
-    end
+    // always @(st_data_sel) begin
+    //     if (st_data_sel == 2'd0) $display("3; forward: default.");
+    //     else if (st_data_sel == 2'd1) $display("3; forward: MEM: %b", st_data_MEM);
+    //     else $display("3; forward: WB: %b", st_data_WB);
+    // end
 
     data_mux_3 alu_1_src (
         .sel(alu_1_sel),
